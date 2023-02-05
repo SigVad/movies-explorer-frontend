@@ -18,7 +18,7 @@
   font-size: 13px;
   font-weight: 500;
   line-height: 16px;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .navtab__link:hover {
