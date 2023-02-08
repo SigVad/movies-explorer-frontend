@@ -5,4 +5,7 @@
 
 * Frontend 
  https://github.com/SigVad/movies-explorer-frontend
+ 
+ МАКЕТ
+ https://disk.yandex.ru/d/gbGvj78aVHUHkw
 
