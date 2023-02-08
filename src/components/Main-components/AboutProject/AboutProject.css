@@ -1,0 +1,152 @@
+.about-project {
+  margin: 0;
+  width: 100%;
+  padding: 110px 70px;
+  box-sizing: border-box;
+}
+.about-project__title {
+  margin: 0px;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  padding-bottom: 23px;
+  border-bottom: 1px solid black;
+}
+.list {
+	max-width: 1140px;
+	list-style: none;
+  margin: 70px auto 110px;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+.list__section {
+	list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.list__subtitle {
+  margin: 0;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+}
+.list__text {
+  margin: 26px 0 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+}
+.time {
+	max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 36px 17px;
+	grid-template-areas: 
+	  "backtime fronttime"
+	  "back front";
+  row-gap: 14px;
+}
+.time__line {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  min-width: 140px;
+  align-items: center;
+  justify-content: center;
+  color: #8b8b8b;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+}
+.time__line_theme_black-and-white {
+  background-color: black;
+  color: white;
+  font-weight: 400;
+	grid-area: backtime;
+}
+.time__line_theme_gray-and-black {
+  background-color: #F2F2F2;
+  color: black;
+  font-weight: 400;
+	grid-area: fronttime;
+}
+.time__line_type_back-sign {
+	grid-area: back;
+
+}
+.time__line_type_front-sign {
+	grid-area: front;
+}
+
+@media screen and (max-width: 1279px) {
+  .about-project {
+    padding: 90px 50px;
+  }
+  .list {
+    max-width: 668px;
+    margin-bottom: 93px;
+    gap: 30px;
+  }
+  .list__text {
+    margin: 22px 0 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .time {
+    max-width: 668px;
+  }
+  .time__line_type_back-sign {
+    font-family: Suisse Intl;
+    font-weight: 400;
+  }
+  .time__line_type_front-sign {
+    font-family: Suisse Intl;
+    font-weight: 400;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .about-project {
+    padding: 70px 18px;
+  }
+  .about-project__title {
+    font-size: 18px;
+    line-height: 22px;
+    padding-bottom: 28px;
+  }
+  .list {
+    max-width: 292px;
+    margin: 60px auto;
+    gap: 56px;
+    flex-direction: column;
+  }
+  .list__subtitle {
+    font-size: 18px;
+    line-height: 22px;
+  }
+  .list__text {
+    margin: 16px 0 0;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  
+  .time {
+    max-width: 292px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 35px 13px;
+    row-gap: 10px;
+  }
+  .time__line {
+    min-width: 100px;
+    font-size: 11px;
+    line-height: 13px;
+  }
+}
