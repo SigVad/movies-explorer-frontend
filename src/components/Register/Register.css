@@ -1,3 +1,140 @@
 .register {
-  margin: 0;
+	max-width: 396px;
+	margin: 70px auto;
+	width: 100%;
+}
+.form {
+	margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-content: center;
+  box-sizing: border-box;
+}
+.form__title {
+  font-family: "Inter";
+  display: block;
+  margin: 40px auto;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: left;
+  color: black;
+}
+
+.form__label{
+  position: relative;
+  margin: 0 0 24px;
+}
+.form__label:last-of-type {
+  margin-bottom: 83px;
+}
+.form__text {
+  margin: 0 0 5px;
+  padding: 0;
+  font-weight: 400;
+  text-align: left;
+  font-size: 10px;
+  line-height: 12px;
+  color: #A0A0A0;
+}
+.form__text_sub {
+  text-align: center;
+  font-size: 14px;
+  line-height: 17px;
+}
+.form__input {
+  padding: 0 0 10px;
+  list-style: none;
+  width: 100%;
+  display: block;
+  border: none;
+  border-bottom: 1px solid #E8E8E8;
+  margin: auto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  box-sizing: border-box;
+}
+.form__input:focus {
+	outline: none;
+  border-color: black;
+  font-weight: 500;
+}
+.form__input_type_error {
+  color: #FF4062;
+}
+.form__input-error {
+  margin: 6px 0 0;
+  display: none;
+  position: absolute;
+  color: #FF4062;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+}
+.form__input-error_active {
+  display: block;
+}
+.form__submit-button {
+  margin: 69px 0 16px;
+  width: 100%;
+  display: block;
+  border-radius: 3px;
+  background: black;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  height: 45px;
+  text-align: center;
+  color: white;
+  border: none;
+  transition: all 0.5s;
+}
+.form__submit-button:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.form__link {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: black;
+  text-decoration: none;
+  transition: all 0.5s;
+}
+.form__link:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+@media screen and (max-width: 1279px) {
+  .register {
+    margin: 232px auto;
+  }
+}
+
+@media screen and (max-width: 767px) {
+.register {
+	max-width: 260px;
+	margin: 56px auto 30px;
+}
+  .form__title {
+    margin: 50px auto 80px;
+    text-align: center;
+  }
+  .form__submit-button {
+    margin: 157px 0 14px;
+  }
+  .form__text_sub {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .form__link {
+    font-size: 12px;
+    line-height: 15px;
+  }
 }
