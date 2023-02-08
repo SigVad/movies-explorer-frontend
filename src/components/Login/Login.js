@@ -12,7 +12,7 @@ function Login() {
       <Header loggedIn={loggedIn} />
       <form action="/signin" className="form" noValidate>
         <p className="form__title">Рады видеть!</p>
-        <label className="form__label">
+        <label className="form__label login__label">
           <p className="form__text">E-mail</p>
           <input
             className="form__input"
@@ -25,7 +25,7 @@ function Login() {
             Что-то пошло не так...
           </span>
         </label>
-        <label className="form__label">
+        <label className="form__label login__label">
           <p className="form__text">Пароль</p>
           <input
             className="form__input"

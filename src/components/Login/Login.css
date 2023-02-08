@@ -3,6 +3,9 @@
   margin: 70px auto;
   width: 100%;
 }
+.login__label:last-of-type {
+  margin-bottom: 42px;
+}
 .login__submit-button{
   margin-top: 179px;
 }
