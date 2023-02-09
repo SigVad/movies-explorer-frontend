@@ -39,26 +39,26 @@ function Navigation({ loggedIn, location }) {
         }>
           <Link to="/" className={`
             navigation__link
-            navigation__link_signed
             navigation__link-master
+            navigation__link_signed
             ${isBurgerOpen ? "display_open" : "display_none"}
           `} >Главная</Link>
           <Link to="/movies" className={`
             navigation__link
-            navigation__link_signed 
             navigation__link-movies
+            navigation__link_signed 
             ${(location === "/movies") ? "navigation__link_is-location" : ""}
           `}>Фильмы</Link>
           <Link to="/saved-movies" className={`
             navigation__link
-            navigation__link_signed
             navigation__link-saved-movies
+            navigation__link_signed
             ${(location === "/saved-movies") ? "navigation__link_is-location" : ""}
           `}>Сохраненные фильмы</Link>
           <Link to="/profile" className="
             navigation__link
-            navigation__link_signed
             navigation__link-profile
+            navigation__link_signed
           "> 
             <img src={avatar} alt="логотип человечек" className="navigation__link-profile-avatar"></img>
             <p className="navigation__link-profile-text">Аккаунт</p>
