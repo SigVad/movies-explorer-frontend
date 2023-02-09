@@ -85,7 +85,7 @@
   margin: 0 8px 10px;
 }
 .navigation__close-burger {
-  position: absolute;
+  position: fixed;
   top: 29px;
   right: 29px;
   display: none;
@@ -108,7 +108,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  position: absolute;
+  position: fixed;
   content: '';
   height: 22px;
   border: 1.5px solid black;
@@ -121,7 +121,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  position: absolute;
+  position: fixed;
   content: '';
   height: 22px;
   border: 1.5px solid black;
@@ -150,6 +150,7 @@
   }
 
   .navigation_signed {
+    position: fixed;
     display: none;
     width: 67%;
     max-width: 520px;
@@ -160,13 +161,13 @@
     bottom: 0;
     z-index: 101;
     background-color:white;
-    position: absolute;
+    position: fixed;
     flex-direction: column;
     gap: 28px;
   }
 
   .navigation__burger-box {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     left: 0;
