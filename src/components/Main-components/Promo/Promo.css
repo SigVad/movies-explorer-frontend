@@ -16,6 +16,7 @@
   position: absolute;
   height: 320px;
   width: 320px;
+  transform: translateY(-20px);
 }
 .promo__title {
   margin: 0;
@@ -26,12 +27,19 @@
   line-height: 58px;
   max-width: 730px;
   letter-spacing: -0.04em;
+  transform: translateY(-20px);
   z-index: 1;
 }
 
 @media screen and (max-width: 1279px) {
   .promo {
     min-height: 784px;
+  }
+  .promo__title {
+    transform: translateY(-8px);
+  }
+  .promo__image {
+    transform: translateY(-8px);
   }
 }
 
@@ -42,10 +50,12 @@
   .promo__image {
     height: 248px;
     width: 248px;
+    transform: translateY(-20px);
   }
   .promo__title {
     font-size: 31px;
     line-height: 39px;
     max-width: 300px;
+    transform: translateY(-20px);
   }
 }

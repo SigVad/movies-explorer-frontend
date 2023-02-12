@@ -90,7 +90,7 @@
     padding: 90px 50px;
   }
   .list {
-    max-width: 668px;
+    min-width: 668px;
     margin-bottom: 93px;
     gap: 30px;
   }
@@ -100,7 +100,7 @@
     line-height: 18px;
   }
   .time {
-    max-width: 668px;
+    min-width: 668px;
   }
   .time__line_type_back-sign {
     font-family: Suisse Intl;
@@ -122,7 +122,7 @@
     padding-bottom: 28px;
   }
   .list {
-    max-width: 292px;
+    min-width: 292px;
     margin: 60px auto;
     gap: 56px;
     flex-direction: column;
@@ -138,7 +138,7 @@
   }
   
   .time {
-    max-width: 292px;
+    min-width: 292px;
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-template-rows: 35px 13px;

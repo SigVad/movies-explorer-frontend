@@ -200,6 +200,12 @@
     font-size: 10px;
     line-height: 16px;
   }
+  .navigation__link-signin {
+    color: white;
+    padding: 5px 12px;
+    background-color: black;
+    border-radius: 3px;
+  }
   .navigation__link_signed {
     font-size: 18px;
     line-height: 21.78px;
