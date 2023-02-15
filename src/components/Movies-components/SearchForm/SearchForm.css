@@ -60,7 +60,7 @@
   flex-direction: row;
 }
 
-@media screen and (max-width: 1287px) {
+@media screen and (max-width: 1277px) {
   .search-form {
     margin: 70px 30px 10px;
   }
@@ -74,7 +74,7 @@
     margin: 70px 14px 10px;
   }
   .search-form__checkbox {
-    margin: 30px 0 0;
+    /* margin: 30px 0 0; */
     padding: 0 0 63px;
   }
   .search-form__button {
