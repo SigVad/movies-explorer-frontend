@@ -39,12 +39,6 @@ export const cardsList = [
   {
     name: 'В погоне за Бенкси',
     duration: 27,
-    link: pic_3,
-    saved: false
-  },
-  {
-    name: 'В погоне за Бенкси',
-    duration: 27,
     link: pic_5,
     saved: false
   },
@@ -53,24 +47,6 @@ export const cardsList = [
     duration: 27,
     link: pic_6,
     saved: true
-  },
-  {
-    name: 'В погоне за Бенкси',
-    duration: 27,
-    link: pic_2,
-    saved: true
-  },
-  {
-    name: 'В погоне за Бенкси',
-    duration: 27,
-    link: pic_3,
-    saved: false
-  },
-  {
-    name: 'В погоне за Бенкси',
-    duration: 27,
-    link: pic_4,
-    saved: false
   },
   {
     name: 'В погоне за Бенкси',
