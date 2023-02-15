@@ -1,5 +1,5 @@
 .profile {
-  margin: 65px auto 79px;
+  margin: 74px auto 79px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,7 +65,7 @@
     margin-bottom: 96px;
   }
   .profile__link {
-    margin-top: 220px 
+    margin-top: 210px 
   }
 }
 
