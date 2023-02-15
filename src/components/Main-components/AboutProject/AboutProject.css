@@ -42,6 +42,7 @@
   text-align: left;
 }
 .time {
+  width: 100%;
 	max-width: 1140px;
   margin: 0 auto;
   display: grid;
@@ -99,9 +100,6 @@
     font-size: 12px;
     line-height: 18px;
   }
-  .time {
-    min-width: 668px;
-  }
   .time__line_type_back-sign {
     font-family: Suisse Intl;
     font-weight: 400;
@@ -138,7 +136,6 @@
   }
   
   .time {
-    min-width: 292px;
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-template-rows: 35px 13px;
