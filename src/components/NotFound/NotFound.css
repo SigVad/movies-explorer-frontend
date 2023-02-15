@@ -1,54 +1,57 @@
 .notfound {
-	box-sizing: border-box;
-  margin-top: 50%;
-  transform: translate(0, 50%);
+  box-sizing: border-box;
   margin: 0;
-	display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center; 
 }
 .notfound__title {
-	font-size: 140px;
-	font-weight: 400;
-	line-height: 169px;
+  font-size: 140px;
+  font-weight: 400;
+  line-height: 169px;
   padding: 0;
-  margin: 0;
-	text-align: center;
+  margin: 246px 0 0;
+  text-align: center;
 }
 .notfound__subtitle {
-	margin: 5px 0;
-	font-size: 16px;
-	font-weight: 400;
-	font-style: normal;
-	text-align: center;
-	line-height: 19px;
+  margin: 5px 0 0;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  text-align: center;
+  line-height: 19px;
 }
 .notfound__link {
   margin: 184px 0 0;
-	font-size: 14px;
-	font-weight: 400;
-	line-height: 17px;
-	cursor: pointer;
-	text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  cursor: pointer;
+  text-decoration: none;
 }
 .notfound__link:hover {
-	opacity: 0.6;
+  opacity: 0.6;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1279px) {
 	.notfound__title {
-		font-size: 80px;
-		line-height: 1;
-		margin-bottom: 10px;
+	  margin: 408px 0 0;
 	}
-	.notfound__subtitle {
-		font-size: 12px;
-		line-height: 1;
-	}
-	.notfound__link {
+}
+@media screen and (max-width: 767px) {
+  .notfound__title {
+	margin: 329px 0 10px;
+    font-size: 80px;
+	Line-height: 97px;
+  }
+  .notfound__subtitle {
+    font-size: 12px;
+    line-height: 1;
+  }
+  .notfound__link {
     margin-top: 284px;
-		font-size: 12px;
-		line-height: 15px;
-	}
+    font-size: 12px;
+    line-height: 15px;
+  }
 }
