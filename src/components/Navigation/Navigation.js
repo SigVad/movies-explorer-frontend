@@ -12,36 +12,38 @@ function Navigation({ loggedIn, location }) {
   }
   if (!loggedIn) { //для Main
     return (
-      <nav className="navigation">
-        <Link to="/signup" className="navigation__link navigation__link-signup">Регистрация</Link>
-        <Link to="/signin" className="navigation__link navigation__link-signin">Войти</Link>
-      </nav>
+      <div className="navigation">
+        <nav className="navigation__links">
+          <Link to="/signup" className="navigation__link navigation__link-signup">Регистрация</Link>
+          <Link to="/signin" className="navigation__link navigation__link-signin">Войти</Link>
+        </nav>
+      </div>
     )
   } else { //для Movies
     return (
-      <>
+      <div className="navigation">
         <button type="button" className={`navigation__burger
-          ${isBurgerOpen ? "display_none" : ""}`} onClick={onBurger}>
+          ${isBurgerOpen ? "navigation__none" : ""}`} onClick={onBurger}>
           <div className="navigation__burger-line"></div>
           <div className="navigation__burger-line"></div>
           <div className="navigation__burger-line"></div>
         </button>
 
         <div className={`navigation__burger-box 
-          ${isBurgerOpen ? "display_open" : "display_none"}`}></div>
+          ${isBurgerOpen ? "navigation__open" : "navigation__none"}`}></div>
 
         <button type="button" className={`navigation__close-burger
-          ${isBurgerOpen ? "display_open" : ""}`} onClick={onBurger}>
+          ${isBurgerOpen ? "navigation__open" : ""}`} onClick={onBurger}>
         </button>
 
-        <nav className={`navigation navigation_signed
-          ${isBurgerOpen ? "display_open" : ""}`
+        <nav className={`navigation__links navigation__signed
+          ${isBurgerOpen ? "navigation__open" : ""}`
         }>
           <Link to="/" className={`
             navigation__link
             navigation__link-master
             navigation__link_signed
-            ${isBurgerOpen ? "display_open" : "display_none"}
+            ${isBurgerOpen ? "navigation__link_open" : "navigation__none"}
           `} >Главная</Link>
           <Link to="/movies" className={`
             navigation__link
@@ -65,7 +67,7 @@ function Navigation({ loggedIn, location }) {
           </Link>
         </nav>
         
-      </>
+      </div>
     )
   }
 }

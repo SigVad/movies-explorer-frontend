@@ -34,7 +34,7 @@ function Register() {
             id="email"
             placeholder='Необходимо ввести e-mail'
           />
-          <span className="form__input-error email__input-error">
+          <span className="form__input-error">
             Что-то пошло не так...
           </span>
         </label>
@@ -47,7 +47,7 @@ function Register() {
             id="pass"
             minLength="7"
           />
-          <span className="form__input-error form__input-error_active  pass__input-error">
+          <span className="form__input-error form__input-error_active">
             Что-то пошло не так...
           </span>
         </label>

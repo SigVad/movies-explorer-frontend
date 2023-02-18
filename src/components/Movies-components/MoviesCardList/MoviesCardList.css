@@ -1,4 +1,4 @@
-.cards__section {
+.cards {
   margin: 75px 70px 0;
   padding: 0;
   display: flex;
@@ -48,7 +48,7 @@
   height: 36px;
 }
 @media screen and (max-width: 1279px) {
-  .cards__section {
+  .cards {
     margin: 75px 30px 0;
   }
   .cards__list {
@@ -59,7 +59,7 @@
   }
 }
 @media screen and (max-width: 767px) {
-.cards__section {
+.cards {
     margin: 46px 10px 0;
   }
   .cards__list {

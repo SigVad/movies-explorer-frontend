@@ -8,7 +8,7 @@ function Login() {
   const loggedIn = false;
 
   return (
-    <main className="register">
+    <main className="login">
       <Header loggedIn={loggedIn} />
       <form action="/signin" className="form" noValidate>
         <p className="form__title">Рады видеть!</p>
@@ -21,7 +21,7 @@ function Login() {
             id="email"
             placeholder='Необходимо ввести e-mail'
           />
-          <span className="form__input-error email__input-error">
+          <span className="form__input-error">
             Что-то пошло не так...
           </span>
         </label>
@@ -34,7 +34,7 @@ function Login() {
             id="pass"
             minLength="7"
           />
-          <span className="form__input-error pass__input-error">
+          <span className="form__input-error">
             Что-то пошло не так...
           </span>
         </label>

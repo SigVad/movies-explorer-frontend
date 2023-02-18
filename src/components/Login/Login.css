@@ -10,6 +10,12 @@
   margin-top: 179px;
 }
 
+@media screen and (max-width: 1279px) {
+  .login {
+    margin: 232px auto;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .login {
     max-width: 260px;

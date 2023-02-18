@@ -7,7 +7,7 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 function MoviesCardList({ location }) {
 
   return (
-    <section className='cards__section'>
+    <section className='cards'>
       <ul className="cards__list">
         { cardsList.map((card)=>{
           return ( 
