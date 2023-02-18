@@ -190,7 +190,7 @@
   .navigation__open {
     display: flex;
   }
-  .navigation__link_open__open {
+  .navigation__link_open {
     display: flex;
   }
   .navigation__none {

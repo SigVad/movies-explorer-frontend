@@ -24,9 +24,9 @@ function Navigation({ loggedIn, location }) {
       <div className="navigation">
         <button type="button" className={`navigation__burger
           ${isBurgerOpen ? "navigation__none" : ""}`} onClick={onBurger}>
-          <div className="navigation__burger-line"></div>
-          <div className="navigation__burger-line"></div>
-          <div className="navigation__burger-line"></div>
+          <span className="navigation__burger-line"></span>
+          <span className="navigation__burger-line"></span>
+          <span className="navigation__burger-line"></span>
         </button>
 
         <div className={`navigation__burger-box 

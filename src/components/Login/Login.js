@@ -12,8 +12,8 @@ function Login() {
       <Header loggedIn={loggedIn} />
       <form action="/signin" className="form" noValidate>
         <p className="form__title">Рады видеть!</p>
-        <label className="form__label login__label">
-          <p className="form__text">E-mail</p>
+        <p className="form__label login__label">
+          <label for="email" className="form__text">E-mail</label>
           <input
             className="form__input"
             name="email"
@@ -24,9 +24,9 @@ function Login() {
           <span className="form__input-error">
             Что-то пошло не так...
           </span>
-        </label>
-        <label className="form__label login__label">
-          <p className="form__text">Пароль</p>
+        </p>
+        <p className="form__label login__label">
+          <label for="pass" className="form__text">Пароль</label>
           <input
             className="form__input"
             type="password"
@@ -37,7 +37,7 @@ function Login() {
           <span className="form__input-error">
             Что-то пошло не так...
           </span>
-        </label>
+        </p>
         <button className="form__submit-button login__submit-button" type="submit">
         Войти
         </button>

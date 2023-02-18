@@ -11,8 +11,8 @@ function Register() {
       <Header loggedIn={loggedIn} />
       <form action="/signup" className="form" noValidate>
         <p className="form__title">Добро пожаловать!</p>
-        <label className="form__label">
-          <p className="form__text">Имя</p>
+        <p className="form__label">
+          <label for="name" className="form__text">Имя</label>
           <input
             className="form__input"
             name="name"
@@ -24,9 +24,9 @@ function Register() {
           <span className="form__input-error name-input-error">
           Что-то пошло не так...
           </span>
-        </label>
-        <label className="form__label">
-          <p className="form__text">E-mail</p>
+        </p>
+        <p className="form__label">
+          <label for="email" className="form__text">E-mail</label>
           <input
             className="form__input"
             name="email"
@@ -37,9 +37,9 @@ function Register() {
           <span className="form__input-error">
             Что-то пошло не так...
           </span>
-        </label>
-        <label className="form__label">
-          <p className="form__text">Пароль</p>
+        </p>
+        <p className="form__label">
+          <label for="pass"  className="form__text">Пароль</label>
           <input
             className="form__input form__input_type_error"
             type="password"
@@ -50,7 +50,7 @@ function Register() {
           <span className="form__input-error form__input-error_active">
             Что-то пошло не так...
           </span>
-        </label>
+        </p>
         <button className="form__submit-button" type="submit">
           Зарегистрироваться
         </button>
