@@ -1,0 +1,245 @@
+.navigation__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 30px;
+}
+.navigation__signed {
+  column-gap: 20px;
+}
+.navigation__link {
+  margin: 0;
+  padding: 0;
+  transition: all .5s;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: black;
+}
+.navigation__link:hover {
+	opacity: 0.6;
+  cursor: pointer;
+}
+.navigation__link-signin {
+  color: white;
+  padding: 8px 20px;
+  background-color: black;
+  border-radius: 3px;
+}
+.navigation__link-movies {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+}
+.navigation__link-saved-movies {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+}
+.navigation__link-profile {
+  margin-left: 30px;
+  display: flex;
+  column-gap: 7px;
+  padding: 8px 12px;
+  border: 2px solid rgba(170, 170, 170, 0.2);
+  border-radius: 50px;
+}
+.navigation__link-profile-avatar {
+  margin: auto;
+  padding: 0;
+  width: 12px;
+  height: 14px;
+}
+.navigation__link-profile-text {
+  margin: auto;
+  padding: 0;
+  font-size: 14px;
+}
+.navigation__link-master {
+  display: none;
+}
+.navigation__burger {
+  display: none;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  transition: all 0.5s;
+}
+.navigation__burger:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.navigation__burger-line{
+  margin: 7px 8px;
+  width: 28px;
+  height: 3px;
+  cursor: pointer;
+  background-color: black;
+}
+.navigation__burger-line:first-of-type{
+  margin: 11px 8px 0;
+}
+.navigation__burger-line:last-of-type{
+  margin: 0 8px 10px;
+}
+.navigation__close-burger {
+  position: fixed;
+  top: 29px;
+  right: 29px;
+  display: none;
+  justify-content: center;
+  box-sizing: border-box;
+  list-style: none;
+  width: 25px;
+  height: 25px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  content: '';
+  border: none;
+  cursor: pointer;
+  background: none;
+  z-index: 104;
+}
+.navigation__close-burger:before {
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  content: '';
+  height: 22px;
+  border: 1.5px solid black;
+  background-color: black;
+  transform: rotate(45deg);
+}
+
+.navigation__close-burger:after {
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  content: '';
+  height: 22px;
+  border: 1.5px solid black;
+  background-color: black;
+  transform: rotate(-45deg);
+}
+.navigation__none {
+  display: none;
+}
+
+
+
+@media screen and (max-width: 1279px) {
+  .navigation__link_signed {
+    font-size: 18px;
+    line-height: 21.78px;
+    padding-bottom: 6px;
+  }
+  .navigation__link-profile {
+    margin: auto 0 0;
+  }
+  .navigation__burger {
+    display: flex;
+  }
+  .navigation__link_is-location {
+    border-bottom: 2px solid black;
+  }
+  .navigation__signed {
+    position: fixed;
+    display: none;
+    width: 67%;
+    max-width: 520px;
+    padding: 159px 0 90px;
+    justify-content: start;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 101;
+    background-color:white;
+    position: fixed;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .navigation__burger-box {
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    background-color:black;
+    opacity: 0.3;
+    z-index: 100;
+  }
+  .navigation__close-burger{
+    top: 27px;
+    right: 27px;
+  }
+  .navigation__open {
+    display: flex;
+  }
+  .navigation__link_open {
+    display: flex;
+  }
+  .navigation__none {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .navigation__close-burger{
+    top: 17px;
+    right: 17px;
+  }
+  .navigation__links {
+    column-gap: 15px;
+  } 
+  .navigation__signed {
+    padding: 144px 0 46px;
+    width: 100%;
+    gap: 13px;
+  }
+  .navigation__link {
+    font-size: 10px;
+    line-height: 16px;
+  }
+  .navigation__link-signin {
+    color: white;
+    padding: 5px 12px;
+    background-color: black;
+    border-radius: 3px;
+  }
+  .navigation__link_signed {
+    padding-bottom: 10px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+  .navigation__burger-line{
+    margin: 6.5px 9px;
+    width: 22px;
+    height: 2.5px;
+    cursor: pointer;
+    background-color: black;
+  }
+  .navigation__burger-line:first-of-type{
+    margin: 12.5px 9px 0;
+  }
+  .navigation__burger-line:last-of-type{
+    margin: 0 9px 10px;
+  }
+  .navigation__link-profile-text {
+    line-height: 16px;
+  }
+}
