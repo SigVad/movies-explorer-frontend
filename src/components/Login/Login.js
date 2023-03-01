@@ -1,41 +1,66 @@
 // компонент страницы авторизации. /signin
+
 import '../Register/Register.css';
 import './Login.css';
 import Header from '../Header/Header';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import {useForm} from '../../hooks/useForm';
 
-function Login() {
-  const loggedIn = false;
+function Login(props) {
+
+   const authData =  useForm({email:'', password:''});
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    props.onLogin({
+      email: authData.values.email,
+      password: authData.values.password,
+    });
+    authData.setValues({email:'', password:''});
+  }
 
   return (
     <main className="login">
-      <Header loggedIn={loggedIn} />
-      <form action="/signin" className="form" noValidate>
+      <Header loggedIn={props.loggedIn} />
+      <form 
+        action="/signup"
+        className="form"
+        noValidate
+        onSubmit={ handleSubmit }
+      >
         <p className="form__title">Рады видеть!</p>
         <p className="form__label login__label">
-          <label for="email" className="form__text">E-mail</label>
+          <label htmlFor="email" className="form__text">E-mail</label>
           <input
+            required
+            minLength="2" 
+            maxLength="30" 
             className="form__input"
             name="email"
             type="email"
             id="email"
-            placeholder='Необходимо ввести e-mail'
+            placeholder=''
+            onChange={authData.handleChange}
+            value={authData.values.email}
           />
           <span className="form__input-error">
-            Что-то пошло не так...
           </span>
         </p>
         <p className="form__label login__label">
-          <label for="pass" className="form__text">Пароль</label>
+          <label htmlFor="pass" className="form__text">Пароль</label>
           <input
             className="form__input"
             type="password"
             name="password"
             id="pass"
-            minLength="7"
+            placeholder=''
+            required
+            minLength="6" 
+            onChange={authData.handleChange}
+            value={authData.values.pass}
+            autoComplete="off"
           />
           <span className="form__input-error">
-            Что-то пошло не так...
           </span>
         </p>
         <button className="form__submit-button login__submit-button" type="submit">
@@ -52,4 +77,4 @@ function Login() {
   )
 }
 
-export default Login;
+export default withRouter(Login);
