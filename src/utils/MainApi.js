@@ -28,11 +28,10 @@ class MainApi {
   getUserInfo() {//запроcить инф. пользователя
     console.log(`getUserInfo (запроcить инф. пользователя)`);
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: {
-        headers: this._headers,
-        credentials: this._credentials,
-      },
-    }).then(this._checkAnswer);
+      headers: this._headers,
+      credentials: this._credentials,
+    })
+      .then(this._checkAnswer);
   }
 
   changeUserInfo(user) {//изменить информацию пользователя
@@ -52,9 +51,9 @@ class MainApi {
   savedMovieChange(film, isSaved) {//сохранить или удалить
     console.log(`savedMovieChange (сохранить или удалить)`);
     if (isSaved) {//если сохранен. удалить
-      this._deleteMovie(film);
+      return this._deleteMovie(film);
     } else {//или сохранить
-      this._saveMovie(film);
+      return this._saveMovie(film);
     }
   }
 
@@ -65,7 +64,8 @@ class MainApi {
       headers: this._headers,
       credentials: this._credentials,
       body: JSON.stringify(film),
-    }).then(this._checkAnswer);
+    })
+      .then(this._checkAnswer);
   }
 
   _deleteMovie(film) {//удалить фильм
@@ -74,7 +74,8 @@ class MainApi {
       method: "DELETE",
       headers: this._headers,
       credentials: this._credentials,
-    }).then(this._checkAnswer);
+    })
+      .then(this._checkAnswer);
   }
 
   signOut() { //выйти
@@ -106,7 +107,7 @@ class MainApi {
 			credentials: this._credentials,
       body: JSON.stringify(data)
     })
-    .then(this._checkAnswer)
+      .then(this._checkAnswer)
   }
 }
 
