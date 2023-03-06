@@ -5,16 +5,23 @@ import iconX from "../../../images/icon-X.svg";
 import iconV from "../../../images/icon-V.svg";
 
 
+function MoviesCard({ 
+  card,
+  location,
+  filmIsSaved,
+  toggleSavedFilm
+}) {
 
-function MoviesCard({ card, location="none" }) {
-
-	const [isSelected, setIsSelected] = useState(card.saved);
-
-	const onSelect = useCallback(
-	  () => setIsSelected(!isSelected),
+	const [isSelected, setIsSelected] = useState(filmIsSaved(card.movieId));
+	
+  const onSelect = useCallback(
+	  () => {
+      setIsSelected(!isSelected);
+      toggleSavedFilm(card);
+    },
 	  [isSelected]
 	);
-
+  
   function isMoviesPage() {
       if (location === "/movies") {
         return true; // iconV
@@ -22,18 +29,15 @@ function MoviesCard({ card, location="none" }) {
       return false; // iconX
     }
 
-
-
-  if (!isMoviesPage() && !isSelected)  {
-    return
-  } else {
     return (
     <li className="card">
       <div className="card__container">
-        <h2 className="card__title">{card.name}</h2>
+        <h2 className="card__title">{card.nameRU}</h2>
         <p className="card__duration">{card.duration} минут</p>
       </div>
-      <img className="card__photo" src={card.link} alt="постер фильма" />
+			<a className="card__link" href={card.trailerLink} target="_blank" rel="noreferrer">
+        <img className="card__photo" src={card.image} alt="постер фильма" />
+			</a>
         {
           isSelected
             ? <button type="button" className={`card__button 
@@ -43,13 +47,12 @@ function MoviesCard({ card, location="none" }) {
                   src={isMoviesPage() ? iconV : iconX
                 } alt="иконка" />
               </button>
-            : <button type="button" className="card__button"  
-            onClick={onSelect}>
+            : <button type="button" className="card__button" onClick={onSelect}>
                 Сохранить
               </button>
         }
     </li>
-  )}
+  )
 }
 
 export default MoviesCard;
