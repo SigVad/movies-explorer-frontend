@@ -17,17 +17,18 @@ function SavedMovies({
   savedFilmsList,//фильмы из базы
   quantityFilms, //выводимое количество фильмов
   toggleSavedFilm,//если нажать на кнопку
-  savedFilms,//из бд
-  filmIsSaved,//проверка на наличие фильма в бд
+  IsSaved,
+  inspectFilmIsSaved,//проверка на наличие фильма в бд
   onMoreFilmsClick,//если нажать на Ещё
 }) {
   const location = useLocation().pathname;
-
+  
   return (
     <>
       <Header loggedIn={loggedIn}  location = {location} />
       <main className='saved-movies'>
         <SearchForm 
+          location = {location}
           shortFilms = {shortFilmsDb}//чекбокс
           toggleShortFilms = {toggleShortFilmsDb}//действие на чекбокс
           onSearch = {onSearchDb}//Поиск
@@ -36,17 +37,15 @@ function SavedMovies({
 
 			  { (isLoading) 
           ? <Preloader />
-          : (savedFilmsList === []) 
-            ? (<p className={`movies__message`}>Ничего не найдено</p>)
-            : <MoviesCardList
-                location = {location}
-                filmsList = {savedFilmsList}//фильмы movies из setFilms(поиск(короткие(localStorage)))
-                quantityFilms = {quantityFilms} //выводимое количество фильмов
-                toggleSavedFilm = {toggleSavedFilm}//если нажать на кнопку
-                savedFilms = {savedFilms}//из бд
-                filmIsSaved = {filmIsSaved}//проверка на наличие фильма в бд
-                onMoreFilmsClick = {onMoreFilmsClick}//если нажать на Ещё
-              />
+          : <MoviesCardList
+              location = {location}
+              filmsList = {savedFilmsList}//фильмы movies из setFilms(поиск(короткие(localStorage)))
+              quantityFilms = {quantityFilms} //выводимое количество фильмов
+              toggleSavedFilm = {toggleSavedFilm}//если нажать на кнопку
+              inspectFilmIsSaved = {inspectFilmIsSaved}//проверка на наличие фильма в бд
+              IsSaved = {IsSaved}
+              onMoreFilmsClick = {onMoreFilmsClick}//если нажать на Ещё
+            />
         }
       </main>
       <Footer />

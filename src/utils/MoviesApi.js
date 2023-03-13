@@ -13,7 +13,8 @@ class MoviesApi {
     return Promise.reject(`Ошибка ${res.status}`);
   }
   
-  getMovies() {
+  getMovies() { // запросить список фильмов
+    // console.log(`getMovies (запросить список фильмов)`);
     return fetch(this._baseUrl, {
       headers: {
         "Content-Type": "application/json",
