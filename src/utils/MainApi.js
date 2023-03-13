@@ -16,8 +16,8 @@ class MainApi {
     return Promise.reject(`Ошибка ${res.status}`);
   }
 
-  getMovies() {//запроcить список фильмов
-    console.log(`getMovies (запроcить список фильмов)`);
+  getMovies() {//запроcить список сохраненных фильмов
+    // console.log(`getMovies (запроcить список сохраненных фильмов)`);
     return fetch(`${this._baseUrl}/movies`, {
       headers: this._headers,
       credentials: this._credentials,
@@ -26,7 +26,7 @@ class MainApi {
   }
 
   getUserInfo() {//запроcить инф. пользователя
-    console.log(`getUserInfo (запроcить инф. пользователя)`);
+    // console.log(`getUserInfo (запроcить инф. пользователя)`);
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
       credentials: this._credentials,
@@ -35,30 +35,27 @@ class MainApi {
   }
 
   changeUserInfo(user) {//изменить информацию пользователя
-    console.log(`changeUserInfo (изменить инф. пользователя)`);
+    // console.log(`changeUserInfo (изменить инф. пользователя)`);
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",//частичное обновление ресурса
       headers: this._headers,
       credentials: this._credentials,
-      body: JSON.stringify({
-        name: user.userName,
-        email: user.userEmail,
-      }),
+      body: JSON.stringify(user),
     })
     .then(this._checkAnswer);
   }
 
-  savedMovieChange(film, isSaved) {//сохранить или удалить
-    console.log(`savedMovieChange (сохранить или удалить)`);
+  savedMovieChange(film, id, isSaved) {//сохранить или удалить
+    // console.log(`savedMovieChange (сохранить или удалить)`);
     if (isSaved) {//если сохранен. удалить
-      return this._deleteMovie(film);
+      return this._deleteMovie(id);
     } else {//или сохранить
       return this._saveMovie(film);
     }
   }
 
   _saveMovie(film) {//сохранить фильм
-    console.log(`saveMovie (сохранить фильм)`);
+    // console.log(`saveMovie (сохранить фильм)`);
     return fetch(`${this._baseUrl}/movies`, {
       method: "POST",//полное обновление ресурса
       headers: this._headers,
@@ -68,9 +65,10 @@ class MainApi {
       .then(this._checkAnswer);
   }
 
-  _deleteMovie(film) {//удалить фильм
-    console.log(`deleteMovie (удалить фильм)`);
-    return fetch(`${this._baseUrl}/movies/${film._id}`, {
+  _deleteMovie(id) {//удалить фильм 
+    // console.log(`deleteMovie (удалить фильм) ${id}`);
+    
+    return fetch(`${this._baseUrl}/movies/${id}`, {
       method: "DELETE",
       headers: this._headers,
       credentials: this._credentials,
@@ -79,7 +77,7 @@ class MainApi {
   }
 
   signOut() { //выйти
-    console.log(`signOut (запроc для выхода)`);
+    // console.log(`signOut (запроc для выхода)`);
     return fetch(`${this._baseUrl}/signout`, {
       method: 'POST',
       headers: this._headers,
@@ -89,7 +87,7 @@ class MainApi {
   }
 
   registration(data) {//запроc регистрации
-    console.log(`registration (запроc регистрации)`);
+    // console.log(`registration (запроc регистрации)`);
     return fetch(`${this._baseUrl}/signup`, {
       method: 'POST',
       headers: this._headers,
@@ -100,7 +98,7 @@ class MainApi {
   }
 
   authorization(data) {//запроc авторизации
-    console.log(`authorization (запроc авторизации)`);
+    // console.log(`authorization (запроc авторизации)`);
     return fetch(`${this._baseUrl}/signin`, {
       method: 'POST',
       headers: this._headers,
