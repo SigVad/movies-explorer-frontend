@@ -16,253 +16,392 @@ import Profile from '../Profile/Profile';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 import NotFound from '../NotFound/NotFound';
-
-
-
+import StatusPopup from '../StatusPopup/StatusPopup';
 
 function App(props) {
-  // const textAuthStatusSuccess = 'Вы успешно \nзарегистрировались!';
-  const textAuthStatusErrorDefault = `Что-то пошло не так! \nПопробуйте ещё раз.`;
-  let textError = '';
+  const textAuthStatusErrorDefault = `Во время запроса произошла ошибка. 
+  Возможно, проблема с соединением или сервер недоступен.`;
+  const [textError, setTextError] = useState(""); //ошибка сервера
+  const [message, setMessage] = useState(""); //уведомление
 
   const [currentUser, setCurrentUser] = useState([]);
-  
-  const [loggedIn, setLoggedIn] = useState(false);//статус авторизации
   const [isLoading, setIsLoading] = useState(false);//на прелоадер
-
   const [filmsList, setFilmsList] = useState([]);//отображаемый массив фильмов
   const [films, setFilms] = useState([]);//массив фильмов
   const [searchText, setSearchText] = useState('');//поисковый запрос
   const [shortFilms, setShortFilms] = useState(false);//состояние чекбокса коротких
-
-  const [savedFilmsList, setSavedFilmsList] = useState([]);//отображаемый массив фильмов из бд
   const [savedFilms, setSavedFilms] = useState([]);//массив фильмов из бд
+  const [loggedIn, setLoggedIn] = useState(false);//статус авторизации
+  const [savedFilmsList, setSavedFilmsList] = useState([]);//отображаемый массив фильмов из бд
   const [searchTextDb, setSearchTextDb] = useState('');//поисковый запрос из бд
   const [shortFilmsDb, setShortFilmsDb] = useState(false);//состояние чекбокса коротких из бд
-
-  const [windowSize, setWindowSize] = useState(0);//размер экрана
+  const [windowSize, setWindowSize] = useState(-1);//размер экрана
   const [quantityFilms, setQuantityFilms] = useState(0); //выводимое количество фильмов
-	const [onMoreFilms, setOnMoreFilms] = useState(0);
+  const [onMoreFilms, setOnMoreFilms] = useState(0);
   
-  // useEffect(() => {
-	// 	handleQuantityFilms();
-	// }, [windowSize])
-
-	window.onresize = (() => {
-		setTimeout(() => {
-			setWindowSize(window.innerWidth);
-			handleQuantityFilms();
-		}, 500)
-	})
-
-  function handleQuantityFilms() {
-		if (windowSize > 1279) {
-			setQuantityFilms(12);
-			setOnMoreFilms(3);
-		// } else if (windowSize > 479) {
-		} else if (windowSize > 767) {
-			setQuantityFilms(8);
-			setOnMoreFilms(2);
-		} else {
-			setQuantityFilms(5);
-			setOnMoreFilms(2);
-		}
-	}
-
-	useEffect(() => {
-    setWindowSize(window.innerWidth);
-    handleQuantityFilms()
-		checkToken();
-	}, [loggedIn, props.history]);
-
-	useEffect(() => {
-    putSearchTextToLocal(searchText);
-    putShortFilmsToLocal(shortFilms);
-    setFilmsList(searchFilter(films, searchText, shortFilms));
-	}, [shortFilms, searchText]);
+  const [statusPopup, setStatusPopup] = useState(false); // попап статуса
 
   useEffect(() => {
-    setSavedFilmsList(searchFilter(savedFilms, searchTextDb, shortFilmsDb));
-	}, [shortFilmsDb, searchTextDb]);
+    // console.log('первый юз');
+    checkToken();
+  }, []);
 
-  function checkToken() { //проверка авторизации
-		console.log('checkToken');
-    mainApi.getUserInfo()
-			.then((res) => {
-				if (res) {
-					setCurrentUser(res);
-          setFilms(loadFilmsInLocal());
-          setSearchText(loadSearchTextInLocal());
-          setShortFilms(loadShortFilmsInLocal());
-          setFilmsList(searchFilter(films, searchText, shortFilms));
-          setSavedFilmsList(searchFilter(savedFilms, searchTextDb, shortFilmsDb));
-					setLoggedIn(true);
-          console.log(props.history.location.pathname);
-					props.history.push(props.history.location.pathname);
-          return res;
-				}
-			})
-			.catch((err) => {
-        const textError = `Не удалось получить данные пользователя.`;
-        console.log(`${textError} ${err}`);
+  useEffect(() => {
+    // console.log('юз на логгед');
+    let lokation = props.history.location.pathname;
+    if((!loggedIn)&&((lokation === '/movies') || (lokation === '/saved-movies'))) {
+      setFilms(loadFilmsInLocal());
+      loadFilmsDb();
+      setSearchText(loadSearchTextInLocal());
+      setShortFilms(loadShortFilmsInLocal());
+      resetLocation();}
+  }, [loggedIn]);
+
+	useEffect(() => {
+    // console.log('юз на историю');
+		handleQuantityFilms();
+    let location = props.history.location.pathname;
+    location !== '/' && putLocationToLocal(location);
+    if ((props.history.location.pathname === '/movies') && (films !== [])) 
+    { handleFiltredFilms() };
+    if ((props.history.location.pathname === '/saved-movies') && (savedFilms !== [])) 
+    { handleFiltredSavedFilms() };
+	}, [ props.history.location.key ])
+  
+  window.onresize = (() => { //обновлять ширину экрана каждую секунду
+    setTimeout(() => {
+      setWindowSize(window.innerWidth);
+      handleQuantityFilms();
+    }, 500)
+  })
+
+	function checkToken() {//готов проверить статус авторизацмм
+		mainApi.getUserInfo()
+      .then((res) => {
+        if (res) {
+          setCurrentUser(res);
+          setLoggedIn(true);
+          props.history.push(loadLocationInLocal());
+        }
+      })
+      .catch((err) => {
+        props.history.push('/');
         setLoggedIn(false);
-			})
+      });
 	}
 
+  function handleFiltredFilms() {
+    // console.log('обновление списка фильмов');
+      if (searchText !== '') {
+      setFilmsList(() => searchFilter(films, searchText, shortFilms));
+      }
+  }
+
+  function handleFiltredSavedFilms() {
+    // console.log('обновление списка сохраненных фильмов');
+      setSavedFilmsList(() => searchFilter(savedFilms, searchTextDb, shortFilmsDb));
+  }
+
+  function resetLocation(){
+    props.history.push(props.history.location.pathname);
+  }
+
+  function handleQuantityFilms() {
+    let size = windowSize;
+    if (size === -1) {
+      size = window.innerWidth;
+      setWindowSize(size);
+    };
+    if (size > 1279) {
+      setQuantityFilms(12);
+      setOnMoreFilms(3);
+    } else if (size > 767) {
+      setQuantityFilms(8);
+      setOnMoreFilms(2);
+    } else {
+      setQuantityFilms(5);
+      setOnMoreFilms(2);
+    }
+  }
+
+  function onMessageTimeout(text){
+    setMessage(text)
+    setStatusPopup(true);
+    setTimeout(() => {
+      setMessage('');
+      setStatusPopup(false);
+    }, 3000);
+  }
+
+  function onTextErrorTimeout(text){
+    setStatusPopup(true);
+    setTextError(text);
+    setTimeout(() => {
+      setTextError('');
+      setStatusPopup(false);
+    }, 3000);
+  }
   function handleRegister(data) { //Зарегистрироваться
+    setIsLoading(true);
     mainApi.registration(data)
       .then((res) => {//и войти
-        setLoggedIn(true);
+        onMessageTimeout('Вы успешно \nзарегистрировались!');
         handleLogin({ email:data.email, password:data.password });
         return res;
       })
       .catch((err) => {
+        let text = '';
         switch (err) {
-          case 400:
-            textError = `Некорректно заполнено одно из полей ввода.`;
+          case 'Ошибка 409':
+            text = `Пользователь уже существует`;
             break;
+          case 'Ошибка 400':
+            text = `Некорректно заполнено одно из полей ввода`;
+          break;
           default:
-            textError = textAuthStatusErrorDefault;
+            text = textAuthStatusErrorDefault;
         };
-        console.log(`${textError} Ошибка ${err}`);
+        onTextErrorTimeout(text);
       })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleLogin(data) { //Войти
+    setIsLoading(true);
     mainApi.authorization(data)
     .then((res) => {
+      setLoggedIn(true);
+      onMessageTimeout('Добро пожаловать!');
+      saveUserInfo();
+      loadFilms();
+      loadFilmsDb();
       props.history.push('/movies');
-      setFilms(loadFilmsInLocal());
-      setSearchText(loadSearchTextInLocal());
-      setShortFilms(loadShortFilmsInLocal());
     })
     .catch((err) => {
+      let text = '';
       switch (err) {
-        case 400:
-          textError = `Не передано одно из полей ввода.`;
+        case 'Ошибка 400':
+          text = `Не передано одно из полей ввода.`;
           break;
-        case 401:
-          textError = `Пользователь с этим Email не найден.`;
+        case 'Ошибка 401':
+          text = `Пользователь с этим Email не найден.`;
           break;
         default:
-          textError = textAuthStatusErrorDefault;
+          text = textAuthStatusErrorDefault;
       };
-      console.log(`${textError} Ошибка ${err}`);
+      onTextErrorTimeout(text);
     })
+    .finally(() => {
+      setIsLoading(false);
+    });
+  }
+  function saveUserInfo() {
+    setIsLoading(true);
+     mainApi.getUserInfo()
+       .then((res) => {
+         if (res) {
+          setCurrentUser(res);
+          setLoggedIn(true);
+          return res;
+        }
+      })
+      .catch((err) => {
+        const textError = `Не удалось получить данные пользователя.`;
+        onTextErrorTimeout(textError);
+        setLoggedIn(false);
+        signOut();
+       })
+       .finally(() => {
+         setIsLoading(false);
+       });
+  }
+  function handleChangeUserInfo(user) {
+    setIsLoading(true);
+    mainApi
+      .changeUserInfo(user)
+      .then((res) => {
+        setCurrentUser(res);
+        // localStorage.setItem("email", res.email);
+        // localStorage.setItem("name", res.name);
+        onMessageTimeout("Данные успешно обновлены");
+      })
+      .catch((err) => {
+        onTextErrorTimeout(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
-  function signout() { //Выйти
+  function signOut() { //Выйти
+    setIsLoading(true);
     mainApi.signOut()
       .then(() => {
-        props.history.push('/');
-        setLoggedIn(false);
+        setCurrentUser([]);
+        setFilmsList([]);//отображаемый массив фильмов
+        setFilms([]);//массив фильмов
+        setSearchText('');//поисковый запрос
+        setShortFilms(false);//состояние чекбокса коротких
+        setSavedFilms([]);//массив фильмов из бд
+        setLoggedIn(false);//статус авторизации
+        setSavedFilmsList([]);//отображаемый массив фильмов из бд
+        setSearchTextDb('');//поисковый запрос из бд
+        localStorage.removeItem('isLocation');
+        localStorage.removeItem('searchText');
+        localStorage.removeItem('shortFilms');
+        localStorage.removeItem('filmsList');
+        localStorage.removeItem('savedFilms');
+        onMessageTimeout('Приходите ещё!');
+        props.history.push("/");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      onTextErrorTimeout('Произошла ошибка. Повторите запрос.');
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
   }
 
   //раздел для фильмов
-
   function loadFilms() { //загрузить фильмы
-    // console.log('loadFilms');
-		return moviesApi.getMovies()
-			.then(list => { 
-        const formatList = list.map((card)=>{
-          return filmFormatToDb(card);
+    setIsLoading(true);
+    return moviesApi.getMovies()
+      .then(list => {
+        const formatList = list.map((item)=>{
+          return filmFormatToDb(item);
         })
         //загрузить фильмы в localStore
         localStorage.setItem('filmsList', JSON.stringify(formatList));
         setFilms(formatList);
+        return (formatList);
       })
-			.catch((err) => {
-				console.log(err);
+      .catch((err) => {
+        onTextErrorTimeout(textAuthStatusErrorDefault);
         setFilms([]);
-			})
-	}
+        return ([]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+  }
   function loadFilmsDb() { //загрузить сохраненные фильмы
-    console.log('loadFilmsDb');
-		return mainApi.getMovies()
-			.then(list => {
-        console.log(list);
+    setIsLoading(true);
+    return mainApi.getMovies()
+      .then(list => {
         setSavedFilms(list);
       })
-			.catch((err) => {
-				console.log(err);
+      .catch((err) => {
+        onTextErrorTimeout(textAuthStatusErrorDefault);
         setSavedFilms([]);
-			})
-	}
-
-  function loadFilmsInLocal() { //выгрузить фильмы из localStore
-    const list = JSON.parse(
-      localStorage.getItem('filmsList')
-    );
-    console.log(`loadFilmsInLocal`);
-    return (list) 
-      ? (list)
-      : ([]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
+  function loadFilmsInLocal() { //выгрузить фильмы из localStore
+    const films = JSON.parse(
+      localStorage.getItem('filmsList')
+    );
+    return (films)
+      ? (films)
+      : loggedIn 
+        ? loadFilms()
+        : ([]);
+  }
+ 
   function putSearchTextToLocal(text) { //загрузить поисковый запрос в localStore
-    // console.log(`putSearchTextToLocal ${text}`);
     localStorage.setItem('searchText', JSON.stringify(text));
-	}
+  }
+
   function loadSearchTextInLocal() { //выгрузить поисковый запрос из localStore
-		const text = JSON.parse(
+    const text = JSON.parse(
       localStorage.getItem('searchText')
     );
-    // console.log(`loadSearchTextInLocal ${text}`);
-    return (text) 
+    return (text)
       ? (text)
       : ('');
-	}
+  }
+  function putLocationToLocal(status) { //загрузить локацию и в localStore
+    localStorage.setItem('isLocation', JSON.stringify(status));
+  }
+
+  function loadLocationInLocal() { //выгрузить локацию из localStore
+    const status = JSON.parse(
+      localStorage.getItem('isLocation')
+    );
+    return (status) 
+      ? (status)
+      : ('/');
+  }
 
   function putShortFilmsToLocal(short) { //загрузить состояние чекбокса в localStore
     localStorage.setItem('shortFilms', JSON.stringify(short));
-    // console.log(`putShortFilmsToLocal ${short}`);
-	}
+  }
+
   function loadShortFilmsInLocal() { //выгрузить состояние чекбокса из localStore
-		const short = JSON.parse(
+    const short = JSON.parse(
       localStorage.getItem('shortFilms')
     );
-    // console.log(`loadShortFilmsInLocal ${short}`);
     return (short) 
       ? (short)
       : (false);
-	}
-
-
-  function toggleShortFilms() { //переключить короткие на чекбокс
-    // console.log(`toggleShortFilms`);
+  }
+  
+  function toggleShortFilms() { //переключить на чекбокс
+    setIsLoading(true);
+    putShortFilmsToLocal(!shortFilms);
     setShortFilms(!shortFilms);
+    handleFiltredFilms();
+    resetLocation();
+    setIsLoading(false);
   }
 
   function toggleShortFilmsDb() { //переключить короткие на чекбокс
-    // console.log(`toggleShortFilmsDb`);
+    setIsLoading(true);
     setShortFilmsDb(!shortFilmsDb);
+    handleFiltredSavedFilms();
+    resetLocation();
+    setIsLoading(false);
   }
 
   function onSearch(text) { //Поиск
-    // console.log('onSearch');
-    loadFilms(); //перезагрузить фильмы
-    setSearchText(text); //заменить текст для поиска
+    if (text==='') { 
+      onTextErrorTimeout("Нужно ввести ключевое слово")
+    }
+    else {
+      setIsLoading(true);
+      putSearchTextToLocal(text);
+      setSearchText(text); //заменить текст для поиска
+      handleFiltredFilms();
+      resetLocation();
+      setIsLoading(false);
+    }
   }
+
   function onSearchDb(text) { //Поиск
-    console.log('onSearchDb');
-    loadFilmsDb(); //перезагрузить фильмы
+    setIsLoading(true);
     setSearchTextDb(text); //заменить текст для поиска
+    handleFiltredSavedFilms();
+    resetLocation();
+    setIsLoading(false);
   }
 
   function searchFilter(list, text, short) { //фильтр текста на Поиск
-    // console.log('searchFilter');
-    return shortFilter(list, short).filter((film)=>{
-      return film
-        .nameRU
-        .toLowerCase()
-        .indexOf(text.toLowerCase()) !== -1;
-    });
+    const filtredList = shortFilter(list, short).filter(
+      (film)=>
+        film.nameRU.toLowerCase().indexOf(text.toLowerCase()) !== -1
+      )
+    filtredList.length !== 0
+      ? onMessageTimeout("")
+      : onTextErrorTimeout("Ничего не найдено");
+    return filtredList;
   }
 
   function shortFilter(list, short) { //фильтр текста на короткие
-    // console.log('shortFilter');
     return short //если короткие, фильтровать
     ? list.filter((film)=>{
         return film.duration <= SHORT_DURATION;
@@ -271,59 +410,90 @@ function App(props) {
   }
 
   function toggleSavedFilm(film) { //если нажать на Сохранить/Удалить
-    // console.log('toggleSavedFilm');
-		const isSaved = filmIsSaved(film.movieId);
-    console.log(`isSaved ${isSaved}`);
-
-    mainApi.savedMovieChange(film, isSaved)//Сохранить или Удалить
+    setIsLoading(true);
+    let save = false;
+    let id = inspectFilmIsSaved(film.movieId);
+    id ? save = true : id = '';
+    mainApi.savedMovieChange( //Сохранить или Удалить
+      {
+        nameRU: film.nameRU,
+        nameEN: film.nameEN,
+        director: film.director,
+        country: film.country,
+        year: film.year,
+        duration: film.duration,
+        description: film.description,
+        trailerLink: film.trailerLink, 
+        image: film.image, 
+        thumbnail: film.thumbnail, 
+        movieId: film.movieId
+      }, id, save)
       .then((res) => {
-        console.log(res);
-        loadFilmsDb();
+        let messageText = '';
+        if (save){
+          setSavedFilms(((state) => savedFilms.filter((item)=>{
+              return film.movieId !== item.movieId;
+            })));
+          messageText = `Фильм ${film.nameRU} удален`;
+        } else {
+          setSavedFilms(((state) => [...state, res]));
+          messageText = `Фильм ${film.nameRU} сохранен`;
+        }
+        handleFiltredSavedFilms();
+        handleFiltredFilms();
+        resetLocation();
+        onMessageTimeout(messageText);
       })
       .catch((err) => {
-        console.log(err);
+        onTextErrorTimeout(`${save ? 'Удалить': 'Сохранить'} фильм не удалось.`);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
+
   function filmFormatToDb(film) { //преобразовать для сохранения в БД
     return {
-    nameRU: film.nameRU,
-    nameEN: film.nameEN,
-    director: film.director,
-    country: film.country,
-    year: film.year,
-    duration: film.duration,
-    description: film.description,
-    trailerLink: film.trailerLink,
-    image: `${IMAGES_URL}${film.image.url}`,
-    thumbnail: `${IMAGES_URL}${film.image.formats.thumbnail.url}`,
-    movieId: film.id,
+      nameRU: film.nameRU,
+      nameEN: film.nameEN,
+      director: film.director,
+      country: film.country,
+      year: film.year,
+      duration: film.duration,
+      description: film.description,
+      trailerLink: film.trailerLink,
+      image: `${IMAGES_URL}${film.image.url}`,
+      thumbnail: `${IMAGES_URL}${film.image.formats.thumbnail.url}`,
+      movieId: film.id,
     }
   }
+
   function onMoreFilmsClick() { //если нажать на Ещё
     setQuantityFilms(quantityFilms + onMoreFilms)
-    console.log(`onMoreFilmsClick ${quantityFilms}`);
   }
 
-  function filmIsSaved(id) { //проверка на наличие фильма в бд
-    // console.log('filmIsSaved');
-    // console.log(savedFilms);
-    return savedFilms.some(item => 
-      (item.movieId === id)
-    );
+  function inspectFilmIsSaved(movieId) { //проверка на наличие фильма в бд
+    const rezFilm = savedFilms.find((item) => {
+      return (item.movieId === movieId)
+    });
+    if (rezFilm) {
+      return rezFilm._id;
+    } else {
+      return false;
+    }
   }
 
   return (
-		<CurrentUserContext.Provider value={currentUser} >
+    <CurrentUserContext.Provider value={currentUser} >
     <div className='page'>
       <Switch>
         <Route exact path="/">
-          <Main loggedIn={loggedIn}/>
+          <Main loggedIn={loggedIn} />
         </Route>
         <ProtectedRoute
           path="/movies"
-          
           component={Movies}
-          loggedIn={true}//useState статус авторизации
+          loggedIn={loggedIn}//useState статус авторизации
           isLoading={isLoading} //useState на прелоадер
           shortFilms = {shortFilms} //useState состояние чекбокса
           toggleShortFilms = {toggleShortFilms}//действие на чекбокс
@@ -332,16 +502,14 @@ function App(props) {
           filmsList = {filmsList} //useState фильмы movies из setFilms
           quantityFilms = {quantityFilms} //useState выводимое количество фильмов
           toggleSavedFilm = {toggleSavedFilm}//если нажать на Сохранить/Удалить
-          savedFilms = {savedFilms}//useState из бд
-          filmIsSaved = {filmIsSaved}//проверка на наличие фильма в бд
+          inspectFilmIsSaved = {inspectFilmIsSaved}//проверка на наличие фильма в бд
           onMoreFilmsClick = {onMoreFilmsClick}//если нажать на Ещё
         />
         <ProtectedRoute
           path="/saved-movies"
           component={SavedMovies}
-          loadFilmsDb={loadFilmsDb}
-          loggedIn={loggedIn}//useState статус авторизации
-          isLoading={isLoading} //useState на прелоадер
+          loggedIn = {loggedIn}//useState статус авторизации
+          isLoading = {isLoading} //useState на прелоадер
           shortFilmsDb = {shortFilmsDb} //useState состояние чекбокса
           toggleShortFilmsDb = {toggleShortFilmsDb}//действие на чекбокс
           onSearchDb = {onSearchDb}//Поиск
@@ -349,34 +517,42 @@ function App(props) {
           savedFilmsList = {savedFilmsList} //useState фильмы movies из setFilms
           quantityFilms = {quantityFilms} //useState выводимое количество фильмов
           toggleSavedFilm = {toggleSavedFilm}//если нажать на Сохранить/Удалить
-          savedFilms = {savedFilms}//useState из бд
-          filmIsSaved = {filmIsSaved}//проверка на наличие фильма в бд
+          inspectFilmIsSaved = {inspectFilmIsSaved}//проверка на наличие фильма в бд
           onMoreFilmsClick = {onMoreFilmsClick}//если нажать на Ещё
         />
         <ProtectedRoute
           path="/profile"
           component={Profile}
           loggedIn={loggedIn}
-          signout={signout}
+          isLoading={isLoading}
+          signOut={signOut}
+          onChangeUserInfo={handleChangeUserInfo}
         />
         <Route path="/signin">
           <Login
             onLogin={handleLogin}
             loggedIn={loggedIn}
+            isLoading={isLoading}
           />
         </Route>
         <Route path="/signup">
-          <Register 
+          <Register
             onRegister={handleRegister} 
             loggedIn={loggedIn}
+            isLoading={isLoading}
           />
         </Route>
         <Route path="*">
           <NotFound />
         </Route>
       </Switch>
+      <StatusPopup 
+        textError={textError}
+        message={message}
+        isOpen={statusPopup}
+      />
     </ div>
-		</CurrentUserContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
   
