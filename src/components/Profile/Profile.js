@@ -1,37 +1,108 @@
 // компонент страницы изменения профиля.
+import '../Register/Register.css';
 import './Profile.css';
 import Header from '../Header/Header';
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, withRouter } from "react-router-dom";
+import {useFormAndValidation} from '../../hooks/useFormAndValidation';
+import { useState, useContext } from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-const name = "Виталий";
-const email = "pochta@yandex.ru";
-
-function Profile() {
-  const loggedIn = true;
+function Profile({ loggedIn, onChangeUserInfo, signOut, isLoading }) {
   const location = useLocation().pathname;
+	const currentUser = useContext(CurrentUserContext);
+
+  const {
+    values, handleChange, errors, isValid, resetForm, setValues
+  } = useFormAndValidation();
+  const [errorMessage, setErrorMessage] = useState('');
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    if (isNotDublicate()){
+    setErrorMessage('');
+    Promise.resolve(
+      onChangeUserInfo({
+        name:  values.name ? values.name : preventValues().name,
+        email: values.email ? values.email : preventValues().email,
+      })
+    ).then(resetForm)
+    .catch(error => {
+      setErrorMessage(error.message)
+    });
+  }
+  }
+
+  function preventValues(evt) {
+    return { name: currentUser.name, email: currentUser.email };
+  }
+
+  function isNotDublicate() {
+    return !(
+      (currentUser.name === values.name || !values.name)
+      &&
+      (currentUser.email === values.email || !values.email)
+      );
+  }
 
   return (
-    <>
+    <main className="profile">
       <Header loggedIn={loggedIn} location = {location} />
-      <main className='profile'>
-          <h2 className='profile__title'>Привет, {name}!</h2>
-        <div className='profile__line'>
-          <p className='profile__line-text'>Имя</p>
-          <p className="profile__line-text">{name}</p>
-        </div>
-        <div className='profile__line'>
-          <p className='profile__line-text'>E-mail</p>
-          <p className="profile__line-text">{email}</p>
-        </div>
-        <Link className="profile__link" to="/signup">
+      <form className='form profile__form' 
+        onSubmit={ handleSubmit }
+        noValidate
+      >
+          <h2 className='form__title profile__title'>Привет, {currentUser.name}!</h2>
+        <p className='form__label profile__label'>
+          <label  htmlFor="name" className='form__text'>Имя</label>
+          <input 
+            className={`form__input ${ errors.name && 'form__input_type_error' }  profile__input`}
+						type='text'
+            required
+            minLength="2"
+            maxLength="30"
+            pattern='[A-Za-zА-яа-яёЁ\s\-]+$'
+            name="name"
+            id="register-name"
+            placeholder=''
+            onChange={ handleChange }
+            value={ values.name || values.name==='' ? values.name : preventValues().name }
+            disabled={isLoading}
+          />
+          <span className="form__input-error form__input-error_active profile__input-error">
+            {errors.name}
+          </span>
+        </p>
+        <p className="form__label profile__label">
+          <label htmlFor="register-email" className="form__text">E-mail</label>
+          <input 
+            className={`form__input ${ errors.email && 'form__input_type_error' }  profile__input`}
+            required
+            minLength="2" 
+            maxLength="30" 
+            name="email"
+            type="email"
+            id="register-email"
+            placeholder=''
+            onChange={ handleChange }
+            value={ values.email || values.email ==='' ? values.email : preventValues().email }
+            disabled={isLoading}
+          />
+          <span className="form__input-error profile__input-error">
+            {errors.email}
+          </span>
+        </p>
+        <button className={
+          `profile__button ${isValid && isNotDublicate() && 'profile__button_active'}`
+          } type="submit" disabled={!isValid}
+        >
           Редактировать
-        </Link>
-        <Link className="profile__link" to="/">
+        </button>
+        <button className="profile__button profile__button_active profile__button_type_isOut" onClick={signOut}>
           Выйти из аккаунта
-        </Link>
-      </main>
-    </>
+        </button>
+      </form>
+    </main>
   )
 }
 
-export default Profile;
+export default withRouter(Profile);

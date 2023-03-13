@@ -1,17 +1,23 @@
 // форма поиска, куда пользователь будет вводить запрос.
 import './SearchForm.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
 function SearchForm({  
+    location,
     shortFilms, //чекбокс
     toggleShortFilms, //действие на чекбокс
     onSearch, //Поиск
-    searchText //текст для фильтра
+    searchText, //текст для фильтра
   }){
+    
 	const [text, setText] = useState(searchText);
-  
 
+
+	useEffect(() => {
+		setText(text);
+	}, [])
+  
   function onSubmit(evt){
 		evt.preventDefault();
     onSearch(text);
@@ -38,11 +44,15 @@ function SearchForm({
           onChange={handleSearch}
         ></input>
         <button className='search-form__button' type='submit'>Поиск</button>
+        <span className="search-form__error">
+          {}
+        </span>
       </form>
       <div className='search-form__checkbox'>
         <FilterCheckbox 
           shortFilms={shortFilms}
           toggleShortFilms={toggleShortFilms}
+          location={location}
         />
       </div>
     </div>

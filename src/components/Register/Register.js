@@ -6,25 +6,34 @@
 import './Register.css';
 import Header from '../Header/Header';
 import { withRouter, Link } from 'react-router-dom';
-import {useForm} from '../../hooks/useForm';
+import { useState } from 'react';
+import {useFormAndValidation} from '../../hooks/useFormAndValidation';
 
-function Register(props) {
+function Register({ loggedIn, onRegister, isLoading }) {
 
-  const authData =  useForm({name:'', email:'', password:''});
+  const {
+    values, handleChange, errors, isValid, resetForm, setValues
+  } = useFormAndValidation();
+  const [errorMessage, setErrorMessage] = useState('');   
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    props.onRegister({
-      name: authData.values.name,
-      email: authData.values.email,
-      password: authData.values.password,
-    });
-    authData.setValues({name:'', email:'', password:''});
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    setErrorMessage('');
+    Promise.resolve(
+      onRegister({
+        name:  values.name,
+        email:  values.email,
+        password:  values.password,
+      })
+      ).then(resetForm)
+      .catch(error => {
+        setErrorMessage(error.message)
+      });
   }
 
   return (
     <main className="register">
-      <Header loggedIn={props.loggedIn} />
+      <Header loggedIn={loggedIn} />
       <form 
         action="/signup"
         className="form"
@@ -33,58 +42,66 @@ function Register(props) {
       >
         <p className="form__title">Добро пожаловать!</p>
         <p className="form__label">
-          <label htmlFor="name" className="form__text">Имя</label>
-          <input
+          <label htmlFor="register-name" className="form__text">Имя</label>
+          <input 
+            className={`form__input ${ errors.name && 'form__input_type_error' }`}
+						type='text'
             required
             minLength="2"
             maxLength="30"
-            pattern="/^[A-Za-zА-яа-я]+$/i"
-            className="form__input"
+            pattern='[A-Za-zА-яа-яёЁ\s\-]+$'
             name="name"
-            id="name"
+            id="register-name"
             placeholder=''
-            onChange={authData.handleChange}
-            value={authData.values.name}
+            onChange={ handleChange }
+            value={values.name ?? ''}
+            disabled={isLoading}
           />
-          <span className="form__input-error name-input-error">
+          <span className="form__input-error name-input-error form__input-error_active">
+            {errors.name}
           </span>
         </p>
         <p className="form__label">
-          <label htmlFor="email" className="form__text">E-mail</label>
-          <input
+          <label htmlFor="register-email" className="form__text">E-mail</label>
+          <input 
+            className={`form__input ${ errors.email && 'form__input_type_error' }`}
             required
-              // validate: (input) => isEmail(input), // true, если корректный
             minLength="2" 
             maxLength="30" 
-            className="form__input"
             name="email"
             type="email"
-            id="email"
+            id="register-email"
             placeholder=''
-            onChange={authData.handleChange}
-            value={authData.values.email}
+            onChange={ handleChange }
+            value={values.email ?? ''}
+            disabled={isLoading}
           />
-          <span className="form__input-error">
+          <span className="form__input-error form__input-error_active">
+            {errors.email}
           </span>
         </p>
         <p className="form__label">
-          <label htmlFor="pass"  className="form__text">Пароль</label>
+          <label htmlFor="register-pass"  className="form__text">Пароль</label>
           <input
-            className="form__input"
+            className={`form__input ${ errors.password && 'form__input_type_error' }`}
             type="password"
             name="password"
-            id="pass"
+            id="register-pass"
             placeholder=''
             required
             minLength="6" 
-            onChange={authData.handleChange}
-            value={authData.values.pass}
+            onChange={ handleChange }
+            value={values.password ?? ''}
             autoComplete="off"
+            disabled={isLoading}
           />
-          <span className="form__input-error form__input-error_active">
+          <span className="form__input-error">
+            {errors.password}
           </span>
         </p>
-        <button className="form__submit-button" type="submit">
+        <button className={
+          `form__submit-button ${isValid && 'form__submit-button_active'}`
+          } type="submit" disabled={!isValid}>
           Зарегистрироваться
         </button>
         <p className="form__text form__text_sub">
