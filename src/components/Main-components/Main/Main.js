@@ -9,13 +9,14 @@ import Techs from '../Techs/Techs';
 import AboutMe from '../AboutMe/AboutMe';
 import Portfolio from '../Portfolio/Portfolio';
 import Footer from '../../Footer/Footer';
+import { useLocation } from 'react-router-dom';
 
-function Main() {
-	const loggedIn = false;
+function Main({loggedIn}) {
+  const location = useLocation().pathname;
 
   return (
     <>
-      <Header loggedIn={loggedIn} location={"/"} />
+      <Header loggedIn={loggedIn} location={location} />
       <main className='main'>
         <Promo />
         <NavTab />

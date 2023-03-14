@@ -33,6 +33,20 @@
 .search-form__input:focus {
   color: black;
 }
+.search-form__error {
+  margin: 0px 200px 0;
+  display: block;
+  position: absolute;
+  color: #FF4062;
+  background-color: white;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+}
+.search-form__message {
+  margin: 34px 200px 0;
+  color: black;
+}
 .search-form__button {
   margin: 10px;
   padding: 0;
@@ -58,6 +72,7 @@
   border-bottom: 1px solid rgba(170, 170, 170, 0.2);
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 @media screen and (max-width: 1277px) {

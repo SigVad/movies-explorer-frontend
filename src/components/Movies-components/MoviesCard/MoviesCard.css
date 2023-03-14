@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 319px;
+  min-height: 100%;
   box-sizing: border-box;
   background: #FDFDFD;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
@@ -75,24 +75,8 @@
   opacity: 0.8;
 }
 
-@media screen and (max-width: 1279px) {
-  .card {
-    /* width: 342px; */
-    width: 100%;
-
-    min-height: 309px;
-  }
-  .card__photo {
-    /* width: 342px; */
-    width: 100%;
-  }
-}
 
 @media screen and (max-width: 767px) {
-  .card {
-    width: 100%;
-    min-height: 271px;
-  }
   .card__title {
     font-size: 12px;
   }
@@ -102,9 +86,7 @@
   .card__container {
     margin: 14px;
   }
-  .card__photo {
-    width: 100%;
-  }.card__button {
+  .card__button {
     margin: 14px auto;
   }
 }
