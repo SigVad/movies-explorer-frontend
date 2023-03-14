@@ -8,7 +8,7 @@ https://disk.yandex.ru/d/gbGvj78aVHUHkw
 
 * Frontend 
 https://sigvad.nomoredomains.rocks 
-https://github.com/SigVad/movies-explorer-frontend
+https://github.com/SigVad/movies-explorer-frontend/pull/2
 
 * Backend 
 https://api.sigvad.nomoredomains.rocks 
