@@ -5,7 +5,13 @@ import { useState, useEffect } from "react";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-import { SHORT_DURATION, IMAGES_URL } from "../../utils/constants"
+import { 
+  SHORT_DURATION, 
+  IMAGES_URL, 
+  FILMS_DISPLAYED,
+  TIMEOUT_ONMESSAGE,
+  TIMEOUT_ONRESIZE
+} from '../../utils/constants';
 import { mainApi } from '../../utils/MainApi';
 import { moviesApi } from "../../utils/MoviesApi";
 
@@ -72,7 +78,7 @@ function App(props) {
     setTimeout(() => {
       setWindowSize(window.innerWidth);
       handleQuantityFilms();
-    }, 500)
+    }, TIMEOUT_ONRESIZE)
   })
 
 	function checkToken() {//готов проверить статус авторизацмм
@@ -108,19 +114,19 @@ function App(props) {
 
   function handleQuantityFilms() {
     let size = windowSize;
-    if (size === -1) {
+    if (size === FILMS_DISPLAYED.windowSize.none) { // -1
       size = window.innerWidth;
       setWindowSize(size);
     };
-    if (size > 1279) {
-      setQuantityFilms(12);
-      setOnMoreFilms(3);
-    } else if (size > 767) {
-      setQuantityFilms(8);
-      setOnMoreFilms(2);
+    if (size > FILMS_DISPLAYED.windowSize.max) {  // 1279
+      setQuantityFilms(FILMS_DISPLAYED.quantityFilms.max); // 12
+      setOnMoreFilms(FILMS_DISPLAYED.onMoreFilms.max); // 3
+    } else if (size > FILMS_DISPLAYED.windowSize.normal) {  // 767
+      setQuantityFilms(FILMS_DISPLAYED.quantityFilms.normal); // 8
+      setOnMoreFilms(FILMS_DISPLAYED.onMoreFilms.normal); // 2
     } else {
-      setQuantityFilms(5);
-      setOnMoreFilms(2);
+      setQuantityFilms(FILMS_DISPLAYED.quantityFilms.min); // 5
+      setOnMoreFilms(FILMS_DISPLAYED.onMoreFilms.normal); // 2
     }
   }
 
@@ -130,7 +136,7 @@ function App(props) {
     setTimeout(() => {
       setMessage('');
       setStatusPopup(false);
-    }, 3000);
+    }, TIMEOUT_ONMESSAGE);
   }
 
   function onTextErrorTimeout(text){
@@ -139,7 +145,7 @@ function App(props) {
     setTimeout(() => {
       setTextError('');
       setStatusPopup(false);
-    }, 3000);
+    }, TIMEOUT_ONMESSAGE);
   }
   function handleRegister(data) { //Зарегистрироваться
     setIsLoading(true);
