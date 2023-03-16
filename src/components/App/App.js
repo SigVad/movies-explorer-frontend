@@ -234,7 +234,18 @@ function App(props) {
         onMessageTimeout("Данные успешно обновлены");
       })
       .catch((err) => {
-        onTextErrorTimeout(err);
+        let text = '';
+        switch (err) {
+          case 'Ошибка 409':
+            text = `Пользователь c таким Email уже существует`;
+            break;
+          case 'Ошибка 400':
+            text = `Некорректно заполнено одно из полей ввода`;
+          break;
+          default:
+            text = textAuthStatusErrorDefault;
+        };
+        onTextErrorTimeout(text);
       })
       .finally(() => {
         setIsLoading(false);
