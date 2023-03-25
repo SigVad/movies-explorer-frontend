@@ -6,13 +6,24 @@ import Header from '../Header/Header';
 import { withRouter, Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useFormAndValidation } from '../../hooks/useFormAndValidation';
+import isEmail from "validator/lib/isEmail";
 
 function Login({ loggedIn, onLogin, isLoading }) {
-
+//console.log(isEmail("1sfffi@kjru"));
   const {
     values, handleChange, errors, isValid, resetForm, setValues
   } = useFormAndValidation();
-  const [errorMessage, setErrorMessage] = useState('');   
+  const [errorMessage, setErrorMessage] = useState('');
+
+  function emailIsValid(value) { //проверка валидности емаил
+    if (value) {
+      if (!isEmail(value)) {
+        if (!errors.email) {
+          errors.email = `Некорректный Email`;
+        }
+      }
+    }
+  };
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -26,6 +37,12 @@ function Login({ loggedIn, onLogin, isLoading }) {
       .catch(error => {
         setErrorMessage(error)
       });
+  }
+  
+  function isValidAndNotError() {
+    return isValid 
+            && (!errors.email || errors.email === '')
+            && (!errors.password || errors.password === '');
   }
 
   return (
@@ -42,12 +59,12 @@ function Login({ loggedIn, onLogin, isLoading }) {
         <p className="form__label login__label">
           <label htmlFor="login-email" className="form__text">E-mail</label>
           <input 
-            htmlFor="login-form"
+            validations={[emailIsValid(values.email, errors.email)]}
             className={`form__input ${ errors.email && 'form__input_type_error' }`}
             required
-              // validate: (input) => isEmail(input), // true, если корректный
             minLength="2" 
             maxLength="30" 
+            // pattern="/^.+@(?:[\w-]+\.)+\w+$/"
             name="email"
             type="email"
             id="login-email"
@@ -81,8 +98,8 @@ function Login({ loggedIn, onLogin, isLoading }) {
           </span>
         </p>
         <button className={
-          `form__submit-button ${isValid && 'form__submit-button_active'} login__submit-button`
-          } type="submit" disabled={!isValid}>
+          `form__submit-button ${ isValidAndNotError() && 'form__submit-button_active'} login__submit-button`
+          } type="submit" disabled={!isValidAndNotError()}>
         Войти
         </button>
         <p className="form__text form__text_sub">

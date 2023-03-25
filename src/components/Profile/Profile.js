@@ -6,6 +6,7 @@ import { useLocation, withRouter } from "react-router-dom";
 import {useFormAndValidation} from '../../hooks/useFormAndValidation';
 import { useState, useContext } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
+import isEmail from "validator/lib/isEmail";
 
 function Profile({ loggedIn, onChangeUserInfo, signOut, isLoading }) {
   const location = useLocation().pathname;
@@ -15,6 +16,16 @@ function Profile({ loggedIn, onChangeUserInfo, signOut, isLoading }) {
     values, handleChange, errors, isValid, resetForm, setValues
   } = useFormAndValidation();
   const [errorMessage, setErrorMessage] = useState('');
+
+  function emailIsValid(value) { //проверка валидности емаил
+    if (value) {
+      if (!isEmail(value)) {
+        if (!errors.email) {
+          errors.email = `Некорректный Email`;
+        }
+      }
+    }
+  };
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -42,6 +53,13 @@ function Profile({ loggedIn, onChangeUserInfo, signOut, isLoading }) {
       &&
       (currentUser.email === values.email || !values.email)
       );
+  }
+
+  function isValidAndNotError() {
+    return isValid 
+            && (!errors.name || errors.name === '')
+            && (!errors.email || errors.email === '')
+            && isNotDublicate();
   }
 
   return (
@@ -73,15 +91,16 @@ function Profile({ loggedIn, onChangeUserInfo, signOut, isLoading }) {
           </span>
         </p>
         <p className="form__label profile__label">
-          <label htmlFor="register-email" className="form__text">E-mail</label>
+          <label htmlFor="profile-email" className="form__text">E-mail</label>
           <input 
+            validations={[emailIsValid(values.email, errors.email)]}
             className={`form__input ${ errors.email && 'form__input_type_error' }  profile__input`}
             required
             minLength="2" 
             maxLength="30" 
             name="email"
             type="email"
-            id="register-email"
+            id="profile-email"
             placeholder=''
             onChange={ handleChange }
             value={ values.email || values.email ==='' ? values.email : preventValues().email }
@@ -92,8 +111,8 @@ function Profile({ loggedIn, onChangeUserInfo, signOut, isLoading }) {
           </span>
         </p>
         <button className={
-          `profile__button ${isValid && isNotDublicate() && 'profile__button_active'}`
-          } type="submit" disabled={!isValid}
+          `profile__button ${isValidAndNotError() && 'profile__button_active'}`
+          } type="submit" disabled={!isValidAndNotError()}
         >
           Редактировать
         </button>

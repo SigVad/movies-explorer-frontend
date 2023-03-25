@@ -8,6 +8,7 @@ import Header from '../Header/Header';
 import { withRouter, Link } from 'react-router-dom';
 import { useState } from 'react';
 import {useFormAndValidation} from '../../hooks/useFormAndValidation';
+import isEmail from "validator/lib/isEmail";
 
 function Register({ loggedIn, onRegister, isLoading }) {
 
@@ -15,6 +16,16 @@ function Register({ loggedIn, onRegister, isLoading }) {
     values, handleChange, errors, isValid, resetForm, setValues
   } = useFormAndValidation();
   const [errorMessage, setErrorMessage] = useState('');   
+
+  function emailIsValid(value) { //проверка валидности емаил
+    if (value) {
+      if (!isEmail(value)) {
+        if (!errors.email) {
+          errors.email = `Некорректный Email`;
+        }
+      }
+    }
+  };
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -31,6 +42,13 @@ function Register({ loggedIn, onRegister, isLoading }) {
       });
   }
 
+  function isValidAndNotError() {
+    return isValid 
+            && (!errors.name || errors.name === '')
+            && (!errors.email || errors.email === '')
+            && (!errors.password || errors.password === '');
+  }
+
   return (
     <main className="register">
       <Header loggedIn={loggedIn} />
@@ -43,7 +61,7 @@ function Register({ loggedIn, onRegister, isLoading }) {
         <p className="form__title">Добро пожаловать!</p>
         <p className="form__label">
           <label htmlFor="register-name" className="form__text">Имя</label>
-          <input 
+          <input
             className={`form__input ${ errors.name && 'form__input_type_error' }`}
 						type='text'
             required
@@ -63,7 +81,8 @@ function Register({ loggedIn, onRegister, isLoading }) {
         </p>
         <p className="form__label">
           <label htmlFor="register-email" className="form__text">E-mail</label>
-          <input 
+          <input
+            validations={[emailIsValid(values.email, errors.email)]}
             className={`form__input ${ errors.email && 'form__input_type_error' }`}
             required
             minLength="2" 
@@ -100,8 +119,8 @@ function Register({ loggedIn, onRegister, isLoading }) {
           </span>
         </p>
         <button className={
-          `form__submit-button ${isValid && 'form__submit-button_active'}`
-          } type="submit" disabled={!isValid}>
+          `form__submit-button ${isValidAndNotError() && 'form__submit-button_active'}`
+          } type="submit" disabled={!isValidAndNotError()}>
           Зарегистрироваться
         </button>
         <p className="form__text form__text_sub">
