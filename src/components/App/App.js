@@ -545,20 +545,22 @@ function App(props) {
           signOut={signOut}
           onChangeUserInfo={handleChangeUserInfo}
         />
-        <Route path="/signin">
-          <Login
-            onLogin={handleLogin}
-            loggedIn={loggedIn}
-            isLoading={isLoading}
-          />
-        </Route>
-        <Route path="/signup">
-          <Register
-            onRegister={handleRegister} 
-            loggedIn={loggedIn}
-            isLoading={isLoading}
-          />
-        </Route>
+        <ProtectedRoute 
+          path="/signin"
+          component={Login}
+          loggedIn={loggedIn} 
+          isLoading={isLoading}
+          onLogin={handleLogin}
+          pageAuth={true}
+        />
+        <ProtectedRoute 
+          path="/signup"
+          component={Register}
+          loggedIn={loggedIn}
+          isLoading={isLoading} 
+          onRegister={handleRegister}
+          pageAuth={true}
+        />
         <Route path="*">
           <NotFound />
         </Route>
