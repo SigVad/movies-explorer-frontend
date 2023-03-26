@@ -420,7 +420,6 @@ function App(props) {
   }
 
   function toggleSavedFilm(film) { //если нажать на Сохранить/Удалить
-    setIsLoading(true);
     let save = false;
     let id = inspectFilmIsSaved(film.movieId);
     id ? save = true : id = '';
@@ -458,7 +457,6 @@ function App(props) {
         if(props.history.location.pathname === "/saved-movies") {
           resetLocation()
         };
-        setIsLoading(false);
       });
   }
 
