@@ -44,7 +44,7 @@ function App(props) {
   const [windowSize, setWindowSize] = useState(-1);//размер экрана
   const [quantityFilms, setQuantityFilms] = useState(0); //выводимое количество фильмов
   const [onMoreFilms, setOnMoreFilms] = useState(0);
-  
+  const [reloadFind, setReloadFind] = useState(false);//перезапустить поиск
   const [statusPopup, setStatusPopup] = useState(false); // попап статуса
 
   useEffect(() => {
@@ -53,26 +53,29 @@ function App(props) {
   }, []);
 
   useEffect(() => {
-    // console.log('юз на логгед');
-    let lokation = props.history.location.pathname;
-    if((!loggedIn)&&((lokation === '/movies') || (lokation === '/saved-movies'))) {
-      setFilms(loadFilmsInLocal());
+    // console.log('юз на логгед вызван');
+    if(loggedIn) {
+      // console.log('юз на логгед сработал');
       loadFilmsDb();
-      setSearchText(loadSearchTextInLocal());
-      setShortFilms(loadShortFilmsInLocal());
-      resetLocation();}
+    }
   }, [loggedIn]);
 
 	useEffect(() => {
     // console.log('юз на историю');
-		handleQuantityFilms();
     let location = props.history.location.pathname;
-    location !== '/' && putLocationToLocal(location);
-    if ((props.history.location.pathname === '/movies') && (films !== [])) 
-    { handleFiltredFilms() };
-    if ((props.history.location.pathname === '/saved-movies') && (savedFilms !== [])) 
-    { handleFiltredSavedFilms() };
-	}, [ props.history.location.key ])
+    loggedIn 
+      ? putLocationToLocal(location)
+      : location !== '/' && putLocationToLocal(location);
+    if (loggedIn && (location === '/movies') && (films !== [])) { 
+      handleQuantityFilms();
+      handleFiltredFilms();
+    };
+    if ((loggedIn && location === '/saved-movies') && (savedFilms !== [])) { 
+      handleQuantityFilms();
+      handleFiltredSavedFilms();
+    };
+    setStatusPopup(false);
+	}, [ props.history.location.key, reloadFind])
   
   window.onresize = (() => { //обновлять ширину экрана каждую секунду
     setTimeout(() => {
@@ -109,7 +112,8 @@ function App(props) {
   }
 
   function resetLocation(){
-    props.history.push(props.history.location.pathname);
+    // console.log('перезагрузка локации');
+    setReloadFind(!reloadFind);
   }
 
   function handleQuantityFilms() {
@@ -182,7 +186,6 @@ function App(props) {
       onMessageTimeout('Добро пожаловать!');
       saveUserInfo();
       loadFilms();
-      loadFilmsDb();
       props.history.push('/movies');
     })
     .catch((err) => {
@@ -229,8 +232,6 @@ function App(props) {
       .changeUserInfo(user)
       .then((res) => {
         setCurrentUser(res);
-        // localStorage.setItem("email", res.email);
-        // localStorage.setItem("name", res.name);
         onMessageTimeout("Данные успешно обновлены");
       })
       .catch((err) => {
@@ -256,20 +257,8 @@ function App(props) {
     setIsLoading(true);
     mainApi.signOut()
       .then(() => {
-        setCurrentUser([]);
-        setFilmsList([]);//отображаемый массив фильмов
-        setFilms([]);//массив фильмов
-        setSearchText('');//поисковый запрос
-        setShortFilms(false);//состояние чекбокса коротких
-        setSavedFilms([]);//массив фильмов из бд
         setLoggedIn(false);//статус авторизации
-        setSavedFilmsList([]);//отображаемый массив фильмов из бд
-        setSearchTextDb('');//поисковый запрос из бд
-        localStorage.removeItem('isLocation');
-        localStorage.removeItem('searchText');
-        localStorage.removeItem('shortFilms');
-        localStorage.removeItem('filmsList');
-        localStorage.removeItem('savedFilms');
+        localStorage.clear();//очистить все поля
         onMessageTimeout('Приходите ещё!');
         props.history.push("/");
     })
@@ -315,6 +304,10 @@ function App(props) {
         setSavedFilms([]);
       })
       .finally(() => {
+        setFilms(loadFilmsInLocal());
+        setSearchText(loadSearchTextInLocal());
+        setShortFilms(loadShortFilmsInLocal());
+        resetLocation();
         setIsLoading(false);
       });
   }
@@ -412,9 +405,9 @@ function App(props) {
       (film)=>
         film.nameRU.toLowerCase().indexOf(text.toLowerCase()) !== -1
       )
-    filtredList.length !== 0
-      ? onMessageTimeout("")
-      : onTextErrorTimeout("Ничего не найдено");
+      if (filtredList.length === 0){
+        onTextErrorTimeout("Ничего не найдено");
+      };
     return filtredList;
   }
 
@@ -451,20 +444,20 @@ function App(props) {
           setSavedFilms(((state) => savedFilms.filter((item)=>{
               return film.movieId !== item.movieId;
             })));
-          messageText = `Фильм ${film.nameRU} удален`;
+          messageText = `Фильм "${film.nameRU}" удален`;
         } else {
           setSavedFilms(((state) => [...state, res]));
-          messageText = `Фильм ${film.nameRU} сохранен`;
+          messageText = `Фильм "${film.nameRU}" сохранен`;
         }
-        handleFiltredSavedFilms();
-        handleFiltredFilms();
-        resetLocation();
         onMessageTimeout(messageText);
       })
       .catch((err) => {
         onTextErrorTimeout(`${save ? 'Удалить': 'Сохранить'} фильм не удалось.`);
       })
       .finally(() => {
+        if(props.history.location.pathname === "/saved-movies") {
+          resetLocation()
+        };
         setIsLoading(false);
       });
   }
@@ -512,10 +505,10 @@ function App(props) {
           component={Movies}
           loggedIn={loggedIn}//useState статус авторизации
           isLoading={isLoading} //useState на прелоадер
-          shortFilms = {shortFilms} //useState состояние чекбокса
+          shortFilms = {loadShortFilmsInLocal()} //useState состояние чекбокса
           toggleShortFilms = {toggleShortFilms}//действие на чекбокс
           onSearch = {onSearch}//Поиск
-          searchText = {searchText} //useState текст для фильтра
+          searchText = {loadSearchTextInLocal()} //useState текст для фильтра
           filmsList = {filmsList} //useState фильмы movies из setFilms
           quantityFilms = {quantityFilms} //useState выводимое количество фильмов
           toggleSavedFilm = {toggleSavedFilm}//если нажать на Сохранить/Удалить
