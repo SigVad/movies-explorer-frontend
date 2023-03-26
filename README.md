@@ -1,11 +1,16 @@
 # movies-explorer-frontend
 интерфейс диплома
+---
+* IP 158.160.53.124
 
-* IP 51.250.76.234
+* МАКЕТ
+https://disk.yandex.ru/d/gbGvj78aVHUHkw
 
 * Frontend 
- https://github.com/SigVad/movies-explorer-frontend
- 
- МАКЕТ
- https://disk.yandex.ru/d/gbGvj78aVHUHkw
+https://sigvad.nomoredomains.rocks 
+https://github.com/SigVad/movies-explorer-frontend/pull/2
 
+* Backend 
+https://api.sigvad.nomoredomains.rocks 
+https://github.com/SigVad/movies-explorer-api
+---

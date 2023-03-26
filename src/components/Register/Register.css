@@ -67,16 +67,17 @@
   color: #FF4062;
 }
 .form__input-error {
-  margin: 6px 0 0;
-  display: none;
+  margin: 2px 0 0;
+  display: block;
   position: absolute;
   color: #FF4062;
+  background-color: white;
   font-weight: 400;
   font-size: 10px;
   line-height: 12px;
 }
-.form__input-error_active {
-  display: block;
+.form__input-message {
+  color: black;
 }
 .form__submit-button {
   margin: 69px 0 16px;
@@ -84,6 +85,7 @@
   display: block;
   border-radius: 3px;
   background: black;
+  opacity: 0.5;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
@@ -93,7 +95,10 @@
   border: none;
   transition: all 0.5s;
 }
-.form__submit-button:hover {
+.form__submit-button_active {
+  opacity: 1;
+}
+.form__submit-button_active:hover {
   cursor: pointer;
   opacity: 0.5;
 }

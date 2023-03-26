@@ -1,57 +1,126 @@
 // компонент страницы регистрации. /signup
+// мануал по React useForm
+// https://medium.com/nuances-of-programming/как-легко-создавать-формы-на-react-с-помощью-react-hook-form-9749c8cb3387
+
+
 import './Register.css';
 import Header from '../Header/Header';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import { useState } from 'react';
+import {useFormAndValidation} from '../../hooks/useFormAndValidation';
+import isEmail from "validator/lib/isEmail";
 
-function Register() {
-  const loggedIn = false;
+function Register({ loggedIn, onRegister, isLoading }) {
+
+  const {
+    values, handleChange, errors, isValid, resetForm, setValues
+  } = useFormAndValidation();
+  const [errorMessage, setErrorMessage] = useState('');   
+
+  function emailIsValid(value) { //проверка валидности емаил
+    if (value) {
+      if (!isEmail(value)) {
+        if (!errors.email) {
+          errors.email = `Некорректный Email`;
+        }
+      }
+    }
+  };
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    setErrorMessage('');
+    Promise.resolve(
+      onRegister({
+        name:  values.name,
+        email:  values.email,
+        password:  values.password,
+      })
+      ).then(resetForm)
+      .catch(error => {
+        setErrorMessage(error.message)
+      });
+  }
+
+  function isValidAndNotError() {
+    return isValid 
+            && (!errors.name || errors.name === '')
+            && (!errors.email || errors.email === '')
+            && (!errors.password || errors.password === '');
+  }
 
   return (
     <main className="register">
       <Header loggedIn={loggedIn} />
-      <form action="/signup" className="form" noValidate>
+      <form 
+        action="/signup"
+        className="form"
+        noValidate
+        onSubmit={ handleSubmit }
+      >
         <p className="form__title">Добро пожаловать!</p>
         <p className="form__label">
-          <label for="name" className="form__text">Имя</label>
+          <label htmlFor="register-name" className="form__text">Имя</label>
           <input
-            className="form__input"
+            className={`form__input ${ errors.name && 'form__input_type_error' }`}
+						type='text'
+            required
+            minLength="2"
+            maxLength="30"
+            pattern='[A-Za-zА-яа-яёЁ\s\-]+$'
             name="name"
-            id="name"
-            minLength="5"
-            maxLength="15"
-            placeholder='Необходимо ввести имя'
+            id="register-name"
+            placeholder=''
+            onChange={ handleChange }
+            value={values.name ?? ''}
+            disabled={isLoading}
           />
-          <span className="form__input-error name-input-error">
-          Что-то пошло не так...
+          <span className="form__input-error name-input-error form__input-error_active">
+            {errors.name}
           </span>
         </p>
         <p className="form__label">
-          <label for="email" className="form__text">E-mail</label>
+          <label htmlFor="register-email" className="form__text">E-mail</label>
           <input
-            className="form__input"
+            validations={[emailIsValid(values.email, errors.email)]}
+            className={`form__input ${ errors.email && 'form__input_type_error' }`}
+            required
+            minLength="2" 
+            maxLength="30" 
             name="email"
             type="email"
-            id="email"
-            placeholder='Необходимо ввести e-mail'
+            id="register-email"
+            placeholder=''
+            onChange={ handleChange }
+            value={values.email ?? ''}
+            disabled={isLoading}
           />
-          <span className="form__input-error">
-            Что-то пошло не так...
+          <span className="form__input-error form__input-error_active">
+            {errors.email}
           </span>
         </p>
         <p className="form__label">
-          <label for="pass"  className="form__text">Пароль</label>
+          <label htmlFor="register-pass"  className="form__text">Пароль</label>
           <input
-            className="form__input form__input_type_error"
+            className={`form__input ${ errors.password && 'form__input_type_error' }`}
             type="password"
             name="password"
-            id="pass"
-            minLength="7"
+            id="register-pass"
+            placeholder=''
+            required
+            minLength="6" 
+            onChange={ handleChange }
+            value={values.password ?? ''}
+            autoComplete="off"
+            disabled={isLoading}
           />
-          <span className="form__input-error form__input-error_active">
-            Что-то пошло не так...
+          <span className="form__input-error">
+            {errors.password}
           </span>
         </p>
-        <button className="form__submit-button" type="submit">
+        <button className={
+          `form__submit-button ${isValidAndNotError() && 'form__submit-button_active'}`
+          } type="submit" disabled={!isValidAndNotError()}>
           Зарегистрироваться
         </button>
         <p className="form__text form__text_sub">
@@ -65,4 +134,4 @@ function Register() {
   )
 }
 
-export default Register;
+export default withRouter(Register);
