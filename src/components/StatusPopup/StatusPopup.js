@@ -1,28 +1,26 @@
 import './StatusPopup.css';
 
-function StatusPopup({textError, message, isOpen}) {
+function StatusPopup({textError, message, isOpen, }) {
   
   if ((isOpen && message) || (isOpen && textError)){
     return (
       <>
       <section className='popup'>
       { message !== '' && (
-        <div className="popup__container">
-          <h2 className="popup__title popup__title-message">Message:</h2>
-          <span className="popup__text popup__text-message">
-            {message}
-          </span>
-        </div>
-          )
+        <p 
+          className="popup__text popup__text-message" 
+          // type="button" 
+          // onClick={}
+          >
+          {message}
+        </p>
+       )
       }
       { textError !== '' && (
-        <div className="popup__container">
-          <h2 className="popup__title">Error:</h2>
-          <span className="popup__text">
-            {textError}
-          </span>
-        </div>
-        )
+        <p className="popup__text">
+          {textError}
+        </p>
+      )
       }
       </section>
       </>

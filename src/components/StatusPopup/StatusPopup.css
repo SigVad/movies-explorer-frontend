@@ -4,45 +4,31 @@
     padding: 0;
     position: fixed;
     color: #FF4062;
-    background-color: rgba(255,255,255,0.7);
+    background-color: rgba(255,255,255,0.8);
     border: 1px solid gray;
     border-radius: 10px;
-    max-width: 380px;
-    width: calc(100% - 80px);
-    min-width: 200px;
+    max-width: 300px;
+    width: calc(100% - 100px);
+    min-width: 100px;
     font-weight: 400;
     font-size: 14px;
     line-height: 1.2;
-    top: 200px;
+    top: 170px;
     left: 0;
     right:0;
     z-index: 108;
-  }
-  .popup__container{
-    margin: 10px 10px;
     display: flex;
-    justify-content: space-between;
-
-
+    justify-content: center;
   }
-  .popup__title{
-    margin: 0;
-    padding: 0;
-    margin-right: 10px;
-    font-weight: 500;
-    font-size: 16px;
 
-  }
   .popup__text{
-    margin: 2px 0 0;
+    margin: 3px 2px;
     display: block;
     text-align: center;
     align-content: center;
 
   }
-  .popup__title-message{
-    color: black;
-  }
+
   .popup__text-message{
     color: black;
   }
